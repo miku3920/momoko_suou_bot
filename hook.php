@@ -196,8 +196,14 @@ class Text {
 
 class Permissions {
 
+	private $admins = [];
+	private $user;
+
 	public function __construct(Chat $chat, User $user) {
-		$this->admins = api::getChatAdministrators(['chat_id' => $chat->id]);
+		$admins = api::getChatAdministrators(['chat_id' => $chat->id]);
+		foreach ($admins as $val) {
+			$this->admins[$val['user']['id']] = $val;
+		}
 		$this->user = $user;
 	}
 
@@ -205,10 +211,15 @@ class Permissions {
 		if ($user->id == USER_ID) {
 			return true;
 		}
-		foreach ($this->admins as $val) {
-			if ($user->id == $val['user']['id']) {
+		return isset($this->admins[$user->id]);
+	}
+
+	public function has(String $permissions, User $user = $this->user) {
+		if (isset($this->admins[$user->id])) {
+			if ($this->admins[$user->id]['status'] == 'creator') {
 				return true;
 			}
+			return $this->admins[$user->id][$permissions];
 		}
 		return false;
 	}
@@ -240,8 +251,7 @@ function message($data) {
 			$req->sendText('startGroup');
 		}
 		$pm = new Permissions($chat, $user);
-		if ($pm->isAdmin()){
-
+		if ($pm->isAdmin()) {
 		}
 	} else if ($msg->has('new_chat_members')) {
 		foreach ($msg->new_chat_members as $newMember) {
