@@ -1,2 +1,4 @@
 *.json
-./data
+.vscode/
+data/
+error_log

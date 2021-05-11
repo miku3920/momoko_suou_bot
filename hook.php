@@ -6,7 +6,7 @@ require_once('config.php');
 
 class Api {
 
-	static function exec_curl_request($handle) {
+	private static function exec_curl_request($handle) {
 		$response = curl_exec($handle);
 
 		if ($response === false) {
@@ -41,7 +41,7 @@ class Api {
 		return $response;
 	}
 
-	function __callStatic($method, $args) {
+	public static function __callStatic($method, $args) {
 		$parameters = $args[0];
 
 		if (!is_string($method)) {
@@ -207,14 +207,16 @@ class Permissions {
 		$this->user = $user;
 	}
 
-	public function isAdmin(User $user = $this->user) {
+	public function isAdmin(User $user = null) {
+		$user = $user ?? $this->user;
 		if ($user->id == USER_ID) {
 			return true;
 		}
 		return isset($this->admins[$user->id]);
 	}
 
-	public function has(String $permissions, User $user = $this->user) {
+	public function has(String $permissions, User $user = null) {
+		$user = $user ?? $this->user;
 		if (isset($this->admins[$user->id])) {
 			if ($this->admins[$user->id]['status'] == 'creator') {
 				return true;
@@ -252,6 +254,7 @@ function message($data) {
 		}
 		$pm = new Permissions($chat, $user);
 		if ($pm->isAdmin()) {
+			// $req->sendText('isAdmin');
 		}
 	} else if ($msg->has('new_chat_members')) {
 		foreach ($msg->new_chat_members as $newMember) {
@@ -280,15 +283,37 @@ function app($data) {
 	}
 }
 
-function main() {
+function webhook() {
 	$update = json_decode(file_get_contents("php://input"), true);
 
 	if (!$update) {
-		echo 'OK';
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$setWebhook = api::setWebhook(['url' => $url]);
+		echo '<pre>', print_r($setWebhook, true), '</pre>';
 		exit;
 	}
 
 	app($update);
 }
 
-main();
+function longPolling() {
+	$i = 0;
+	while (true) {
+		$api = api::getUpdates(['offset' => $i, 'timeout' => 50]);
+		if (isset($api[0])) {
+			foreach ($api as $update) {
+				echo "--------------\n";
+				print_r($update);
+				app($update);
+			}
+			$i = intval($api[count($api) - 1]['update_id']) + 1;
+		} else {
+			print_r($api);
+			sleep(3);
+		}
+	}
+}
+
+// webhook();
+// api::deleteWebhook([]);
+longPolling();
