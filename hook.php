@@ -297,6 +297,12 @@ function webhook() {
 }
 
 function longPolling() {
+
+	$api = api::getWebhookInfo([]);
+	if ($api['url']) {
+		api::deleteWebhook([]);
+	}
+
 	$i = 0;
 	while (true) {
 		$api = api::getUpdates(['offset' => $i, 'timeout' => 50]);
@@ -315,5 +321,4 @@ function longPolling() {
 }
 
 // webhook();
-// api::deleteWebhook([]);
 longPolling();
