@@ -323,5 +323,8 @@ function longPolling() {
 	}
 }
 
-// webhook();
-longPolling();
+if (isset($_SERVER['HTTP_HOST'])) {
+	webhook();
+} else {
+	longPolling();
+}
