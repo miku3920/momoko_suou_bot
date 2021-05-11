@@ -288,8 +288,11 @@ function webhook() {
 
 	if (!$update) {
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		$setWebhook = api::setWebhook(['url' => $url]);
-		echo '<pre>', print_r($setWebhook, true), '</pre>';
+		$info = api::getWebhookInfo([]);
+		if (!$info['url']) {
+			$info = api::setWebhook(['url' => $url]);
+		}
+		echo '<pre>', print_r($info, true), '</pre>';
 		exit;
 	}
 
@@ -298,8 +301,8 @@ function webhook() {
 
 function longPolling() {
 
-	$api = api::getWebhookInfo([]);
-	if ($api['url']) {
+	$info = api::getWebhookInfo([]);
+	if ($info['url']) {
 		api::deleteWebhook([]);
 	}
 
