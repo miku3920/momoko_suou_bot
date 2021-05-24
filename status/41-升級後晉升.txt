@@ -1,0 +1,62 @@
+Array
+(
+    [update_id] => 215633541
+    [my_chat_member] => Array
+        (
+            [chat] => Array
+                (
+                    [id] => -1001191852441
+                    [title] => test
+                    [type] => supergroup
+                )
+
+            [from] => Array
+                (
+                    [id] => 127355800
+                    [is_bot] =>
+                    [first_name] => 初音
+                    [last_name] => ミク
+                    [username] => miku3920
+                    [language_code] => zh-hant
+                )
+
+            [date] => 1621834985
+            [old_chat_member] => Array
+                (
+                    [user] => Array
+                        (
+                            [id] => 1669179611
+                            [is_bot] => 1
+                            [first_name] => 周防桃子
+                            [username] => momoko_suou_bot
+                        )
+
+                    [status] => member
+                )
+
+            [new_chat_member] => Array
+                (
+                    [user] => Array
+                        (
+                            [id] => 1669179611
+                            [is_bot] => 1
+                            [first_name] => 周防桃子
+                            [username] => momoko_suou_bot
+                        )
+
+                    [status] => administrator
+                    [can_be_edited] =>
+                    [can_manage_chat] => 1
+                    [can_change_info] => 1
+                    [can_delete_messages] => 1
+                    [can_invite_users] =>
+                    [can_restrict_members] => 1
+                    [can_pin_messages] => 1
+                    [can_promote_members] =>
+                    [can_manage_voice_chats] =>
+                    [is_anonymous] =>
+                )
+
+        )
+
+)

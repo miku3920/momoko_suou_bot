@@ -1,0 +1,33 @@
+Array
+(
+    [update_id] => 215633540
+    [message] => Array
+        (
+            [message_id] => 1
+            [from] => Array
+                (
+                    [id] => 1087968824
+                    [is_bot] => 1
+                    [first_name] => Group
+                    [username] => GroupAnonymousBot
+                )
+
+            [sender_chat] => Array
+                (
+                    [id] => -1001191852441
+                    [title] => test
+                    [type] => supergroup
+                )
+
+            [chat] => Array
+                (
+                    [id] => -1001191852441
+                    [title] => test
+                    [type] => supergroup
+                )
+
+            [date] => 1621834984
+            [migrate_from_chat_id] => -596713761
+        )
+
+)

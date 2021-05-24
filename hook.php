@@ -116,6 +116,29 @@ class Request {
 	}
 }
 
+class Files {
+
+	private $chat;
+	private $user;
+
+	public function __construct(Chat $chat, User $user) {
+		$this->chat = $chat;
+		$this->user = $user;
+	}
+
+	public function saveBotPermissions() {
+	}
+
+	public function loadBotPermissions() {
+	}
+
+	public function saveGroupSetting() {
+	}
+
+	public function loadGroupSetting() {
+	}
+}
+
 class Data {
 
 	protected $data;
@@ -169,6 +192,61 @@ class User extends Data {
 	public function isNotBot() {
 		return !$this->data['is_bot'];
 	}
+
+	public function isThisBot() {
+		return $this->data['id'] == BOT_ID;
+	}
+
+	public function isNotThisBot() {
+		return $this->data['id'] != BOT_ID;
+	}
+
+	public function isOwner() {
+		return $this->data['id'] == USER_ID;
+	}
+}
+
+class Status {
+
+	private $before;
+	private $after;
+
+	public function	__construct(String $before, String $after) {
+		$this->before = $before;
+		$this->after = $after;
+	}
+
+	public function isGroupJoin() {
+		return $this->before == 'left' or $this->before == 'kicked';
+	}
+
+	public function isGroupLeave() {
+		return $this->after == 'left' or $this->after == 'kicked';
+	}
+
+	public function isAdminPromoted() {
+		return $this->before != 'administrator' and $this->after == 'administrator';
+	}
+
+	public function isAdminDemote() {
+		return $this->before == 'administrator' and $this->after != 'administrator';
+	}
+
+	public function isAdminUpdate() {
+		return $this->before == 'administrator' and $this->after == 'administrator';
+	}
+
+	public function isRestricted(){
+		return $this->before != 'restricted' and $this->after == 'restricted';
+	}
+
+	public function isUnlimited() {
+		return $this->before == 'restricted' and $this->after != 'restricted';
+	}
+
+	public function isRestrictedUpdate() {
+		return $this->before == 'restricted' and $this->after == 'restricted';
+	}
 }
 
 class Text {
@@ -209,7 +287,7 @@ class Permissions {
 
 	public function isAdmin(User $user = null) {
 		$user = $user ?? $this->user;
-		if ($user->id == USER_ID) {
+		if ($user->isOwner()) {
 			return true;
 		}
 		return isset($this->admins[$user->id]);
@@ -259,7 +337,7 @@ function message($data) {
 	} else if ($msg->has('new_chat_members')) {
 		foreach ($msg->new_chat_members as $newMember) {
 			$newUser = new User($newMember);
-			if ($newUser->id != BOT_ID) {
+			if ($newUser->isNotThisBot()) {
 				$req->sendText('newMember');
 			}
 		}
@@ -272,6 +350,24 @@ function editedMessage($data) {
 function callbackQuery($data) {
 }
 
+function myChatMember($data) {
+	$msg = new Data($data);
+	$chat = new Chat($msg->chat);
+
+	$beforeUpdate = new Data($msg->old_chat_member);
+	$afterUpdate = new Data($msg->new_chat_member);
+	$status = new Status($beforeUpdate->status, $afterUpdate->status);
+
+	$user = new User($afterUpdate->user);
+	if ($user->isThisBot()) {
+		if ($status->isGroupJoin()) {
+		} else if ($status->isGroupLeave()) {
+		} else if ($status->isAdminPromoted()){
+
+		}
+	}
+}
+
 function app($data) {
 	$app = new Data($data);
 	if ($app->has('message')) {
@@ -280,6 +376,8 @@ function app($data) {
 		editedMessage($app->edited_message);
 	} else if ($app->has('callback_query')) {
 		callbackQuery($app->callback_query);
+	} else if ($app->has('my_chat_member')) {
+		myChatMember($app->my_chat_member);
 	}
 }
 

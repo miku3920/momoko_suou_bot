@@ -1,0 +1,41 @@
+Array
+(
+    [update_id] => 215633545
+    [message] => Array
+        (
+            [message_id] => 3
+            [from] => Array
+                (
+                    [id] => 1669179611
+                    [is_bot] => 1
+                    [first_name] => 周防桃子
+                    [username] => momoko_suou_bot
+                )
+
+            [chat] => Array
+                (
+                    [id] => -1001191852441
+                    [title] => test
+                    [type] => supergroup
+                )
+
+            [date] => 1621838019
+            [left_chat_participant] => Array
+                (
+                    [id] => 1669179611
+                    [is_bot] => 1
+                    [first_name] => 周防桃子
+                    [username] => momoko_suou_bot
+                )
+
+            [left_chat_member] => Array
+                (
+                    [id] => 1669179611
+                    [is_bot] => 1
+                    [first_name] => 周防桃子
+                    [username] => momoko_suou_bot
+                )
+
+        )
+
+)

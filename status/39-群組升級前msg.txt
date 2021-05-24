@@ -1,0 +1,29 @@
+Array
+(
+    [update_id] => 215633539
+    [message] => Array
+        (
+            [message_id] => 14
+            [from] => Array
+                (
+                    [id] => 127355800
+                    [is_bot] =>
+                    [first_name] => 初音
+                    [last_name] => ミク
+                    [username] => miku3920
+                    [language_code] => zh-hant
+                )
+
+            [chat] => Array
+                (
+                    [id] => -596713761
+                    [title] => test
+                    [type] => group
+                    [all_members_are_administrators] =>
+                )
+
+            [date] => 1621834984
+            [migrate_to_chat_id] => -1001191852441
+        )
+
+)
